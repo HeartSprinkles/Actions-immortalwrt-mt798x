@@ -13,8 +13,8 @@ name: Build OpenWrt
 on:
   repository_dispatch:
   workflow_dispatch:
-  schedule:
-    - cron:  '22 16 * * 2,4'
+#  schedule:
+#    - cron:  '22 16 * * 2,4'
 env:
   TZ: Asia/Shanghai
 
@@ -43,15 +43,15 @@ jobs:
       # working-directory: /workdir
       run: |
         pwd
-        git clone -b openwrt-21.02 --single-branch --depth=1 https://github.com/immortalwrt/immortalwrt openwrt
+        git clone -b openwrt-21.02 --single-branch --depth=1 https://github.com/hanwckf/immortalwrt-mt798x openwrt
         # ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         ls -l
     # 插件包,不要可用注释
-    - name: feeds add kenzok8-package
-      run: |
-        cd openwrt
-        sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
-        sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
+    # - name: feeds add kenzok8-package
+    #   run: |
+    #     cd openwrt
+    #     sed -i '$a src-git kenzo https://github.com/kenzok8/openwrt-packages' feeds.conf.default
+    #     sed -i '$a src-git small https://github.com/kenzok8/small' feeds.conf.default
 
     # - name: feeds add fw876/helloworld
     #   run: |
@@ -73,29 +73,15 @@ jobs:
         make defconfig
         cat ./.config
 
-
-    # - name: Cache Hook
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: |
-    #       openwrt/bin
-    #       openwrt/build_dir
-    #       openwrt/staging_dir
-    #       openwrt/tmp
-    #     key: cache_ar300nand_${{ hashFiles('openwrt/.config') }}
-    #     restore-keys: |
-    #       cache_ar300nand_
-    #       cache_ar300nand
-
     - name: .config file bak
       run: |
         mkdir ./bin
         cp ./.config ./bin/config.bak
 
-    - name: Change IP to..192.168.8.1
+    - name: Change IP to..192.168.2.1
       run: |
         cd openwrt
-        sed -i "s/192.168.1.1/192.168.8.1/" package/base-files/files/bin/config_generate
+        sed -i "s/192.168.1.1/192.168.2.1/" package/base-files/files/bin/config_generate
         cat package/base-files/files/bin/config_generate|grep lan\)
 
     - name: make
