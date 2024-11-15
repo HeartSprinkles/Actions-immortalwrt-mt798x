@@ -136,7 +136,7 @@ jobs:
     #     ./transfer wss --no-progress ${{ env.RELEASE_PATH }}/bin_dir.tar.gz 2>&1 | tee release.txt
 
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
